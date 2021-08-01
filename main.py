@@ -34,32 +34,38 @@ def start():
 
 
 def mainMenu():
-    user_Response = input('\n' "◘ Main Menu" '\n'
-                          "○ Press 1 to get all Tickets." '\n'
-                          "○ Press 2 to get a single ticket." '\n'
-                          "○ Press 3 or type 'exit' to Exit." '\n')
+    while True:
+        user_Response = input('\n' "◘ Main Menu" '\n'
+                              "○ Press 1 to get all Tickets." '\n'
+                              "○ Press 2 to get a single ticket." '\n'
+                              "○ Press 3 or type 'exit' to Exit." '\n')
 
-    if user_Response == str(1):
-        getAllTickets(all_tickets_url, username, password, 1, True)
+        if user_Response == str(1):
+            getAllTickets(all_tickets_url, username, password, 1, True)
 
-    elif user_Response == str(2):
+        elif user_Response == str(2):
 
-        ticket_id = input('\n' "Please Enter the associated ID for the ticket you wish to view - Valid [1-" + str(
-            num_of_tickets) + "]." '\n')
-        while int(ticket_id) < 1 or int(ticket_id) > num_of_tickets:  # Convert to INT
-            print("The ticket ID you entered is not valid" '\n')
-            ticket_id = input('\n' "Please enter the id for the ticket you wish to view - Valid [1-" + str(
+            ticket_id = input('\n' "Please Enter the associated ID for the ticket you wish to view - Valid [1-" + str(
                 num_of_tickets) + "]." '\n')
-        getSingleTicket(single_ticket_url + str(ticket_id) + '.json', username, password)
+            while int(ticket_id) < 1 or int(ticket_id) > num_of_tickets:  # Convert to INT
+                print("The ticket ID you entered is not valid" '\n')
+                ticket_id = input('\n' "Please enter the id for the ticket you wish to view - Valid [1-" + str(
+                    num_of_tickets) + "]." '\n')
+            response = requests.get(single_ticket_url + str(ticket_id) + '.json', auth=(username, password))
+            if (response.status_code != 200):
+                print("OOPS! Looks like you got a " + str(response.status_code) + " error. That usually means")
+                print(ApiErrors.errorCodes.get(int(response.status_code)))
+                continue
+            ticket = response.json()
+            print(getSingleTicket(ticket))
 
-    elif user_Response == str(3) or user_Response.lower() == 'exit':
-        print(
-            'Thank you for stopping by today, and Remember' '\n' "We are the Greatest Ticket Viewer on all the Inter-Webs! (Verified by Us ♥☻♥).")
-        exit()
+        elif user_Response == str(3) or user_Response.lower() == 'exit':
+            print(
+                'Thank you for stopping by today, and Remember' '\n' "We are the Greatest Ticket Viewer on all the Inter-Webs! (Verified by Us ♥☻♥).")
+            exit()
 
-    else:
-        "Please enter a valid response."
-        mainMenu()
+        else:
+            print('\n'"Please enter a valid response.")
 
 
 def getAllTickets(currentURL, user, pwd, page_number, flag_for_parse):
@@ -100,22 +106,16 @@ def getAllTickets(currentURL, user, pwd, page_number, flag_for_parse):
         getAllTickets(currentURL, user, pwd)
 
 
-def getSingleTicket(currentURL, user, pwd):
-    response = requests.get(currentURL, auth=(user, pwd))
-    if (response.status_code != 200):
-        print("OOPS! Looks like you got a " + str(response.status_code) + " error. That usually means")
-        print(ApiErrors.errorCodes.get(int(response.status_code)))
-        return
-    ticket = response.json()
-    print("Ticket ID: " + str(ticket.get('ticket').get('id')))
-    print("Subject: " + str(ticket.get('ticket').get('subject')))
-    print("Description: " + str(ticket.get('ticket').get('description')))
-    print("Status: " + str(ticket.get('ticket').get('status')))
-    print("priority: " + str(ticket.get('ticket').get('priority')))
-    print("Created On: " + str(ticket.get('ticket').get('created_at')))
-    print("Last Updated: " + str(ticket.get('ticket').get('updated_at')))
-    print('\n')
-    mainMenu()
+def getSingleTicket(ticket):
+    ticket_info = " "
+    ticket_info += "Ticket ID: " + str(ticket.get('ticket').get('id')) + '\n'
+    ticket_info += "Subject: " + str(ticket.get('ticket').get('subject')) + '\n'
+    ticket_info += "Description: " + str(ticket.get('ticket').get('description')) + '\n'
+    ticket_info += "Status: " + str(ticket.get('ticket').get('status')) + '\n'
+    ticket_info += "priority: " + str(ticket.get('ticket').get('priority')) + '\n'
+    ticket_info += "Created On: " + str(ticket.get('ticket').get('created_at')) + '\n'
+    ticket_info += "Last Updated: " + str(ticket.get('ticket').get('updated_at')) + '\n'
+    return ticket_info
 
 
 def parseTicketInfo(tickets_list):
