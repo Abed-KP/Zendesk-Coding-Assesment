@@ -1,4 +1,4 @@
-# Zendesk-Coding-Assesment
+
 
 MAJOR NOTE: Unfortunately, it appears that a malicious person, for me, just like others in the slack channel has seen the password for the dummy account, logged in, and cahnged it. If you wish to test this program still, you can try inputting any other accounts login details by changing the 'username' and 'password' variables in main. Make sure you als have API access enabled in your account.
 This repository contains all files relevant to the completion of the Zendesk Coding Assessment for the 2021-2022 Co-op.
