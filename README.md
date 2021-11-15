@@ -1,9 +1,5 @@
 
 
-MAJOR NOTE: Unfortunately, it appears that a malicious person, for me, just like others in the slack channel has seen the password for the dummy account, logged in, and changed it. If you wish to test this program still, you can try inputting any other account's login details by changing the 'username' and 'password' variables in main. Make sure you also have API access enabled in your account.
-
-This repository contains all files relevant to the completion of the Zendesk Coding Assessment for the 2021-2022 Co-op.
-
 This is a CLI App that acts a ticket viewer for my account. The username and password to contacting the API is already hard-coded in the script as the instructions mentioned that it will be contacting my account, and not any user's account. If you wish to view tickets in a different account you must
 a - Change the values of 'username' and 'password' in 'main.py.' to your own.
 b - Log into your account, go to Channels>API> Enable Password Access
